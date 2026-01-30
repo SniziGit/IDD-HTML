@@ -22,6 +22,7 @@ h3.body-text {
     color: #000000;
     margin: auto 20px;
     text-align: left;
+    padding: 10px 10px;
 }
 p {
     font-size: 16px;
@@ -72,7 +73,7 @@ body {
     padding: 10px 20px;
 }
 button.About {
-    background-color: #4CAF50;
+    background-color: hsl(0, 100%, 50%);
     color: white;
     border: none;
     padding: 10px 20px;
@@ -90,4 +91,17 @@ div.divider {
     background-color: rgb(255, 255, 255);
     border-radius: 20px;
     padding: 1px;
+}
+img.body-image {
+    display: block;
+    margin: 20px auto;
+    border-radius: 15px;
+    max-width: 100%;
+    height: auto;
+}
+p.image-caption {
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+    margin-top: 5px;
 }
