@@ -15,7 +15,7 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
     background-color: var(--bg-dark);
     color: var(--text-color);
     line-height: 1.6;
@@ -34,7 +34,7 @@ body {
     left: 0;
     width: 100%;
     padding: 20px 0;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgb(0, 0, 0);
     backdrop-filter: blur(10px);
     z-index: 1000;
 }
@@ -71,14 +71,20 @@ body {
 }
 
 /* Hero Section */
-.hero {
+.hero{
     height: 100vh;
     display: flex;
     align-items: center;
     text-align: center;
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
-                url('../images/hero-bg.jpg') no-repeat center center/cover;
+    background-color: rgba(0, 0, 0, 0.5);
     position: relative;
+}
+
+#about-us {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../images/donut shot4 - Copy.png') no-repeat center center/cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
 }
 
 .hero h1 {
@@ -151,7 +157,7 @@ body {
     width: 4px;
     height: 8px;
     background-color: var(--text-secondary);
-    border-radius: 2px;
+    border-radius: 5px;
     animation: scrollDown 2s infinite;
 }
 
