@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRODUCTS - OVERKILL</title>
+    <link rel="stylesheet" href="./styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="logo">OVERKILL</div>
+                <ul class="nav-links">
+                    <li><a href="./index.html">HOME</a></li>
+                    <li><a href="./aboutus.html">ABOUT US</a></li>
+                    <li><a href="./products.html" class="active">PRE-ORDER</a></li>
+                </ul>
+                <div class="logo-right">LOGO</div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Product Hero Section -->
+    <section class="hero" id="products-hero">
+        <div class="container">
+            <div class="product-hero-content">
+                <h1>WRAITH DDR5 RGB</h1>
+                <div class="product-hero-image">
+                    <div class="product-image-placeholder"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="product-features">
+        <div class="container">
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h3>FEATURE #1</h3>
+                    <div class="feature-image-placeholder"></div>
+                    <p>Advanced DDR5 technology for unprecedented performance and speed.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>FEATURE #2</h3>
+                    <div class="feature-image-placeholder"></div>
+                    <p>Customizable RGB lighting with millions of color combinations.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>FEATURE #3</h3>
+                    <div class="feature-image-placeholder"></div>
+                    <p>Premium aluminum heatsink for optimal thermal management.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Customisation Section -->
+    <section class="customisation-section">
+        <div class="container">
+            <h2>CUSTOMISATION</h2>
+            <div class="customisation-content">
+                <div class="model-container" id="modelViewer">
+                    <!-- 3D model will be loaded here -->
+                </div>
+                <div class="color-options">
+                    <div class="color-wheel-container">
+                        <div class="custom-color-wheel" id="customColorWheel">
+                            <canvas id="colorWheelCanvas" width="200" height="200"></canvas>
+                            <div class="color-wheel-pointer"></div>
+                        </div>
+                        <div class="color-preview"></div>
+                    </div>
+                    <div class="body-colors">
+                        <button class="color-btn black active" data-color="#000000"></button>
+                        <button class="color-btn white" data-color="#ffffff"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Series Name Section -->
+    <section class="series-section">
+        <div class="container" id="product-display">
+            <div class="series-content" id="product-images-grid">
+                <div class="series-images">
+                    <div class="series-image-placeholder"></div>
+                    <div class="series-image-placeholder"></div>
+                    <div class="series-image-placeholder"></div>
+                </div>
+            </div>
+            <div class="series-image-placeholder" id="main"></div>
+        </div>
+        <div class="container">
+            <h2>SERIES NAME</h2>
+            <div class="series-content">
+                <div class="series-images">
+                    <div class="series-image-placeholder"></div>
+                    <div class="series-image-placeholder"></div>
+                </div>
+                <div class="series-info">
+                    <h3>ITEM NAME</h3>
+                    <p>DESCRIPTION</p>
+                    <button class="preorder-btn">PRE-ORDER NOW</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pre-order Form Section -->
+    <section class="preorder-form-section">
+        <div class="container">
+            <h2>SIGN UP FOR PRE-ORDER</h2>
+            <div class="preorder-form">
+                <div class="product-details">
+                    <div class="detail-item">
+                        <label>MODEL</label>
+                        <span>Ignis WRAITH DDR5 RGB 64GB RAM</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>RAM CAPACITY</label>
+                        <div class="ram-slider-container">
+                            <input type="range" min="16" max="128" value="64" class="custom-slider" id="ramSlider">
+                            <div class="slider-value">64GB</div>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <label>PRICE</label>
+                        <span>$999 USD</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>COLOUR</label>
+                        <div class="color-selection">
+                            <button class="color-select-btn black active">BLACK</button>
+                            <button class="color-select-btn white">WHITE</button>
+                        </div>
+                    </div>
+                </div>
+                <form class="preorder-form-fields">
+                    <div class="form-group">
+                        <input type="text" placeholder="FULL NAME" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" placeholder="PHONE NUMBER" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="EMAIL" required>
+                    </div>
+                    <button type="submit" class="submit-btn">SUBMIT PRE-ORDER</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>OVERKILL</h3>
+                    <p>2026. OVERKILL</p>
+                    <p>Tagline Of The Company</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Find Us Here</h3>
+                    <p>123 Design Street, Tech City, TC 12345</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-envelope"></i> info@overkill.com</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="./scripts/main.js"></script>
+    <script src="./scripts/3d-model.js"></script>
+</body>
+</html>
