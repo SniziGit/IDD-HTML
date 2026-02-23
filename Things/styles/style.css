@@ -1583,7 +1583,7 @@ margin-bottom: 20px;
     overflow: hidden;
 }
 #main.series-image-placeholder {
-    height: calc(200px * 3 + 30px * 2);
+    height: calc(200px * 3 + 30px * 4);
     background: linear-gradient(135deg, var(--bg-dark), var(--border-color));
     border: 2px solid var(--border-color);
     background-color: #ff0066;
