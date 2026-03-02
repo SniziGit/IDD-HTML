@@ -406,9 +406,6 @@ body {
 .feature-text {
     flex: 1;
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
 .feature h2 {
@@ -747,36 +744,75 @@ body {
 
 /* Footer */
 .footer {
+    padding: 80px 0;
     background-color: #000000;
-    padding: 60px 0 30px;
-    color: var(--text-secondary);
 }
 
-.footer-content {
+.footer-card {
+    background-color: #000000;
+    border-radius: 20px;
+    padding: 40px;
+    margin: 0 auto;
+    max-width: 1000px;
+    border: 1px solid #333333;
+}
+
+.footer-card-inner {
     display: flex;
     justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 30px;
+    align-items: flex-start;
+    gap: 60px;
 }
 
-.footer-left p {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--text-color);
+.footer-left {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-year {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    font-family: 'Outfit', sans-serif;
+}
+
+.footer-brand {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #ffffff;
+    font-family: 'Outfit', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.footer-right {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 15px;
 }
 
 .footer-right h3 {
-    color: var(--text-color);
-    margin-bottom: 15px;
+    color: #ffffff;
     font-size: 1.2rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    font-weight: 600;
+    font-family: 'Outfit', sans-serif;
+    text-transform: none;
+    letter-spacing: 0.5px;
+    margin-bottom: 5px;
 }
 
 .footer-right p {
-    max-width: 400px;
+    color: #ffffff;
+    font-size: 0.95rem;
     line-height: 1.6;
-    font-size: 0.9rem;
+    font-family: 'Outfit', sans-serif;
+    max-width: 350px;
+    text-transform: none;
+    letter-spacing: 0.5px;
+    margin-bottom: 5px;
 }
 
 /* Responsive Styles */
@@ -824,8 +860,23 @@ body {
         text-align: center;
     }
     
-    .footer-content {
+    .footer-card-inner {
         flex-direction: column;
+        gap: 30px;
+        text-align: center;
+    }
+    
+    .footer-right {
+        text-align: center;
+        align-items: center;
+    }
+    
+    .footer-year {
+        font-size: 2rem;
+    }
+    
+    .footer-brand {
+        font-size: 1.5rem;
     }
 }
 
