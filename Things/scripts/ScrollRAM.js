@@ -1,89 +1,144 @@
 async function setupViewer() {
     const canvas = document.getElementById('web-canvas');
-    if (!canvas) return console.error('Canvas not found');
+    const section = document.getElementById('combined-model-section');
+    if (!canvas || !section) return;
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
+    // Scene
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, canvas.width / canvas.height, 0.1, 1000);
-    camera.position.set(0, 2, 6);
 
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-    renderer.setSize(canvas.width, canvas.height);
+    const camera = new THREE.PerspectiveCamera(
+        75,
+        canvas.clientWidth / canvas.clientHeight,
+        0.1,
+        1000
+    );
+
+    // Keep camera fixed (DO NOT move model)
+    camera.position.set(0.5, 0.7, 2);
+    camera.rotation.set(-0.3, 0.2, 0)
+
+    const renderer = new THREE.WebGLRenderer({
+        canvas,
+        antialias: true,
+        alpha: true
+    });
+
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
 
     // Lights
     const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+    const directional = new THREE.DirectionalLight(0xffffff, 0.8);
+    directional.position.set(5, 5, 5);
+
     scene.add(ambient);
+    scene.add(directional);
 
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    dirLight.position.set(5, 5, 5);
-    dirLight.castShadow = true;
-    scene.add(dirLight);
-
-    // Load model
+    // Load GLB
     const loader = new THREE.GLTFLoader();
-    let model;
-    try {
-        const gltf = await loader.loadAsync('./assets/ScrollRAM.glb');
-        model = gltf.scene;
-    } catch {
-        const gltf = await loader.loadAsync('./assets/WraithRAMBlack.glb');
-        model = gltf.scene;
-    }
+    const gltf = await loader.loadAsync('./assets/OpenAnimationRAM.glb');
 
-    // Center & scale
+    const model = gltf.scene;
+
+    // Only center & scale (NO rotation changes)
     const box = new THREE.Box3().setFromObject(model);
     const center = box.getCenter(new THREE.Vector3());
     const size = box.getSize(new THREE.Vector3());
-    const scale = 3.5 / Math.max(size.x, size.y, size.z);
+    const scale = 2.5 / Math.max(size.x, size.y, size.z);
+
     model.position.sub(center);
     model.scale.multiplyScalar(scale);
+
+    // Rotate upright
+    model.rotation.x = -Math.PI / 2;
+
     scene.add(model);
 
-    let currentY = camera.position.y;
-    const xOffset = 0;
-    const yOffset = 0;
+    // Animation setup
+    let mixer;
+    let animationStarted = false;
+    let animationFinished = false;
+    let animationDuration = 0;
+    let animationStartTime = 0;
 
-    const combinedSection = document.getElementById('combined-features-section');
-    const combinedHeight = combinedSection.offsetHeight;
+    if (gltf.animations.length > 0) {
+        mixer = new THREE.AnimationMixer(model);
 
-   function updateCamera() {
-    const rect = combinedSection.getBoundingClientRect();
-    if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+        const clip = gltf.animations[0];
+        const action = mixer.clipAction(clip);
 
-    // scrollProgress 0 → top of section, 1 → bottom of section
-    let scrollProgress = (window.scrollY - combinedSection.offsetTop) / combinedSection.offsetHeight;
-    scrollProgress = Math.min(Math.max(scrollProgress, 0), 1);
+        action.setLoop(THREE.LoopOnce);
+        action.clampWhenFinished = true;
 
-    // Camera Y moves from 2 → -6 for full section scroll
-    const startY = 2;
-    const endY = -6;
-    currentY += (startY + scrollProgress * (endY - startY) - currentY) * 0.5; // faster smoothing
+        animationDuration = clip.duration;
 
-    camera.position.y = currentY;
-    camera.position.x = 0;
-    camera.position.z = 6 - scrollProgress * 3; // zoom in more aggressively
-    camera.lookAt(model.position);
-}
+        model.userData.action = action;
+    }
+
+    // Scroll lock functions
+    function lockScroll() {
+        document.body.style.overflow = 'hidden';
+    }
+
+    function unlockScroll() {
+        document.body.style.overflow = '';
+    }
+
+    // Detect when section is visible
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (
+                entry.isIntersecting &&
+                !animationStarted &&
+                !animationFinished
+            ) {
+                animationStarted = true;
+                lockScroll();
+
+                if (model.userData.action) {
+                    model.userData.action.play();
+                }
+
+                animationStartTime = performance.now();
+            }
+        });
+    }, { threshold: 0.6 });
+
+    observer.observe(section);
+
+    // Render loop
+    const clock = new THREE.Clock();
 
     function animate() {
         requestAnimationFrame(animate);
-        updateCamera();
+
+        const delta = clock.getDelta();
+        if (mixer) mixer.update(delta);
+
+        // Unlock AFTER full animation duration
+        if (animationStarted && !animationFinished) {
+            const elapsed = (performance.now() - animationStartTime) / 1000;
+
+            if (elapsed >= animationDuration) {
+                unlockScroll();
+                animationFinished = true;
+            }
+        }
+
         renderer.render(scene, camera);
     }
+
     animate();
 
+    // Resize handling
     window.addEventListener('resize', () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        camera.aspect = canvas.width / canvas.height;
+        camera.aspect = canvas.clientWidth / canvas.clientHeight;
         camera.updateProjectionMatrix();
-        renderer.setSize(canvas.width, canvas.height);
+        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
     });
 }
 
+// Init
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', setupViewer);
 } else {
