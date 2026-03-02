@@ -4,10 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OVERKILL - IGNIS Wraith</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./styles/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+
     <!-- Header -->
     <header class="header">
         <div class="container">
@@ -25,10 +29,20 @@
 
     <!-- Hero Section -->
     <section class="hero" id="home">
-        <div class="container">
-            <h1>IGNIS Wraith</h1>
-            <p class="subtitle">REVOLUTIONARY DDRS RAM OF THE CENTURY</p>
-            <a href="./products.html" class="learn-more">VIEW PRODUCTS <i class="fas fa-chevron-right"></i></a>
+        <div class="container hero-layout">
+            <div class="hero-text-block">
+                <p class="hero-kicker">IGNIS</p>
+                <h1 class="hero-title-main">Wraith</h1>
+                <p class="subtitle">REVOLUTIONARY DDR5 RAM OF THE CENTURY</p>
+                <a href="#about" class="learn-more">LEARN MORE &gt;&gt;</a>
+            </div>
+            <div class="hero-image-block">
+                <div class="hero-ram-stack">
+                    <div class="hero-ram-card hero-ram-card-top"></div>
+                    <div class="hero-ram-card hero-ram-card-middle"></div>
+                    <div class="hero-ram-card hero-ram-card-bottom"></div>
+                </div>
+            </div>
             <div class="scroll-down">
                 <span>SCROLL DOWN</span>
                 <div class="arrow-down"></div>
@@ -37,7 +51,7 @@
     </section>
 
     <!-- Feature 1 Section -->
-    <section class="feature" id="about">
+    <section class="feature feature-quantum" id="about">
         <div class="container">
             <div class="feature-content">
                 <div class="feature-text">
@@ -45,18 +59,18 @@
                     <p>Experience unprecedented data transfer rates with our revolutionary DDRS technology. The IGNIS Wraith delivers lightning-fast performance that redefines what's possible in computing.</p>
                 </div>
                 <div class="feature-image">
-                    <div class="placeholder-image large"></div>
+                    <div class="placeholder-image large feature-image-quantum"></div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Feature 2 Section -->
-    <section class="feature feature-alt">
+    <section class="feature feature-alt feature-cooling">
         <div class="container">
             <div class="feature-content">
                 <div class="feature-image">
-                    <div class="placeholder-image large"></div>
+                    <div class="placeholder-image large feature-image-cooling"></div>
                 </div>
                 <div class="feature-text">
                     <h2>ADVANCED COOLING</h2>
@@ -69,30 +83,48 @@
     <!-- Showcase Section -->
     <section class="showcase">
         <div class="container">
-            <h2>Showcase Parts Of The Model On Scroll</h2>
-            <div class="showcase-placeholder"></div>
+            <div class="showcase-content">
+                <div class="model-viewer">
+                    <div class="model-placeholder" id="exploded-model"></div>
+                    <div class="model-callouts">
+                        <div class="model-callout model-callout-left">
+                            <span class="callout-label">ALUMINUM CASING</span>
+                            <span class="callout-line"></span>
+                        </div>
+                        <div class="model-callout model-callout-center">
+                            <span class="callout-label">RAM PCB</span>
+                            <span class="callout-line"></span>
+                        </div>
+                        <div class="model-callout model-callout-right">
+                            <span class="callout-label">FULL CUSTOMISABLE RGB SUPPORT</span>
+                            <span class="callout-line"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-   <!-- Footer -->
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h2>OVERKILL</h2>
-                    <h4>© 2026 OVERKILL Pte. Ltd.</h4>
-                    <p>There is no such thing as too much.</p>
-                </div>
-                <div class="footer-section">
-                    <h2>Find Us Here</h2>
-                    <p>500 Dover Road, Singapore 139651</p>
-                    <p><i class="fas fa-phone"></i> +65 6789 1011</p>
-                    <p><i class="fas fa-envelope"></i> info@overkill.com</p>
+            <div class="footer-card">
+                <div class="footer-card-inner">
+                    <div class="footer-left">
+                        <div class="footer-year">2026.</div>
+                        <div class="footer-brand">OVERKILL</div>
+                    </div>
+                    <div class="footer-center">
+                        <p class="footer-quote">There is no such thing as too much</p>
+                    </div>
+                    <div class="footer-right">
+                        <h3>Find Us Here</h3>
+                        <p>456 Design Street, Tech City<br>+1 (555) 123-4567<br>info@overkill.com</p>
+                    </div>
                 </div>
             </div>
         </div>
     </footer>
-
 
     <script src="./scripts/main.js"></script>
 </body>
