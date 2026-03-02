@@ -124,6 +124,7 @@ body {
     align-items: left;
     height: 100%;
     position: fixed;
+    margin-left: 100px;
     z-index: 10;
 }
 
