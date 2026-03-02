@@ -398,6 +398,8 @@ function initializeProductCarousel() {
                 thumb.classList.add('active');
             } else {
                 thumb.classList.remove('active');
+                // Reset transform when deselected
+                thumb.style.transform = '';
             }
         });
         
