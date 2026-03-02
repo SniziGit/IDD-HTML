@@ -9,7 +9,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./styles/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        #about-us {
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('./images/AboutUsBG.png') no-repeat center center/cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        }
+
+        #overview {
+        background: url('./images/PlainBG.png') no-repeat center center/cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        }
+    </style>
 </head>
+
+
 <body>
     <!-- Header -->
     <header class="header">
@@ -30,7 +45,7 @@
     <section class="hero" id="about-us">
         <div class="container">
             <div class="container">
-                <h1>This is OVERKILL</h1>
+                <h1 class="hero-title-main">This is OVERKILL</h1>
                 <p class="subtitle">There is no such thing as too much.</p>
             </div>
             <div class="scroll-down">
@@ -41,7 +56,7 @@
     </section>
 
     <!-- Overview Section -->
-    <section class="overview-section">
+    <section class="overview-section" id="overview">
         <div class="container">
             <h2>OVERVIEW</h2>
             <p>OVERKILL is a pioneering technology company dedicated to pushing the boundaries of computational performance. We specialize in developing cutting-edge hardware components that redefine what's possible in modern computing. From advanced memory solutions to revolutionary processing units, our products are engineered for those who demand nothing less than the absolute best.</p>
@@ -102,7 +117,7 @@
     </section>
 
     <!-- Team Section -->
-    <section class="team-section">
+    <!-- <section class="team-section">
         <div class="container">
             <h2>MEET THE TEAM</h2>
             <div class="team-grid">
@@ -140,7 +155,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
 
     <!-- Other Services Section -->
     <section class="other-services-section">
@@ -150,23 +165,23 @@
             <div class="products-grid">
                 <div class="product-item">
                     <div class="product-image">
-                        <img src="./images/Product Image 1.jpg" alt="Product Image">
+                        <img src="./images/Product Image 1.jpg" alt="Performance Optimization Image">
                     </div>
-                    <h3>PRODUCT #1</h3>
+                    <h3>Performance Optimization</h3>
                     <p>Advanced computing solution with unparalleled speed and efficiency.</p>
                 </div>
                 <div class="product-item">
                     <div class="product-image">
-                        <img src="./images/Product Image 2.jpg" alt="Product Image 2">
+                        <img src="./images/Product Image 2.jpg" alt="Upgrade Consulting Image">
                     </div>
-                    <h3>PRODUCT #2</h3>
+                    <h3>Upgrade Consulting</h3>
                     <p>Next-generation hardware engineered for maximum performance.</p>
                 </div>
                 <div class="product-item">
                     <div class="product-image">
-                        <img src="./images/Product Image 3.jpeg" alt="Product Image 3">
+                        <img src="./images/Product Image 3.jpeg" alt="Custom Builds Image">
                     </div>
-                    <h3>PRODUCT #3</h3>
+                    <h3>Custom Builds</h3>
                     <p>Premium components designed for enthusiasts and professionals.</p>
                 </div>
             </div>
