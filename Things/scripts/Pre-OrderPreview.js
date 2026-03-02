@@ -1,26 +1,34 @@
-// Get elements
-const mainImage = document.getElementById("main-product-image");
-const thumbnails = document.querySelectorAll(".thumbnail-item");
+document.addEventListener("DOMContentLoaded", () => {
+    const mainImage = document.getElementById("main-product-image");
+    const thumbnails = document.querySelectorAll(".thumbnail-item");
+    const indicators = document.querySelectorAll(".indicator");
 
-// Initialize main image with the first thumbnail
-if (thumbnails.length > 0) {
-    const firstSrc = thumbnails[0].dataset.fullImage;
-    mainImage.style.backgroundImage = `url(${firstSrc})`;
-    mainImage.style.backgroundSize = "cover";
-    mainImage.style.backgroundPosition = "center";
-}
+    // Thumbnail click
+    thumbnails.forEach((thumb, index) => {
+        thumb.addEventListener("click", () => {
+            const fullImage = thumb.dataset.fullImage;
+            mainImage.style.backgroundImage = `url('${fullImage}')`;
 
-// Add click event to thumbnails
-thumbnails.forEach((thumb) => {
-    thumb.addEventListener("click", () => {
-        // Update main image
-        const newSrc = thumb.dataset.fullImage;
-        mainImage.style.backgroundImage = `url(${newSrc})`;
+            // Update active states
+            thumbnails.forEach(t => t.classList.remove("active"));
+            thumb.classList.add("active");
 
-        // Remove active class from all thumbnails
-        thumbnails.forEach((t) => t.classList.remove("active"));
+            indicators.forEach(ind => ind.classList.remove("active"));
+            if (indicators[index]) indicators[index].classList.add("active");
+        });
+    });
 
-        // Add active class to clicked thumbnail
-        thumb.classList.add("active");
+    // Indicator click
+    indicators.forEach((ind, index) => {
+        ind.addEventListener("click", () => {
+            const fullImage = thumbnails[index].dataset.fullImage;
+            mainImage.style.backgroundImage = `url('${fullImage}')`;
+
+            thumbnails.forEach(t => t.classList.remove("active"));
+            thumbnails[index].classList.add("active");
+
+            indicators.forEach(i => i.classList.remove("active"));
+            ind.classList.add("active");
+        });
     });
 });

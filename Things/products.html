@@ -33,9 +33,9 @@
     <section class="hero" id="products-hero">
         <div class="container">
             <div class="product-hero-content">
-                <h1>WRAITH DDR5 RGB</h1>
+                <h1 class="product-hero-title">WRAITH DDR5 RGB</h1>
                 <div class="product-hero-image">
-                    <div class="placeholder-image large"></div>
+                    <img src="./images/Pre-OrderImg.png" alt="Wraith DDR5 RGB">
                 </div>
             </div>
         </div>
@@ -46,18 +46,24 @@
         <div class="container">
             <div class="features-grid">
                 <div class="feature-item">
-                    <h3>FEATURE #1</h3>
-                    <div class="placeholder-image small"></div>
+                    <h2>FEATURE #1</h2>
+                    <div class="feature-image-wrapper">
+                        <img src="./images/Feature Image.jpg" alt="Feature 1">
+                    </div>
                     <p>Advanced DDR5 technology for unprecedented performance and speed.</p>
                 </div>
                 <div class="feature-item">
-                    <h3>FEATURE #2</h3>
-                    <div class="placeholder-image small"></div>
+                    <h2>FEATURE #2</h2>
+                    <div class="feature-image-wrapper">
+                        <img src="./images/Feature Image 2.jpg" alt="Feature 2">
+                    </div>
                     <p>Customizable RGB lighting with millions of color combinations.</p>
                 </div>
                 <div class="feature-item">
-                    <h3>FEATURE #3</h3>
-                    <div class="placeholder-image small"></div>
+                    <h2>FEATURE #3</h2>
+                    <div class="feature-image-wrapper">
+                        <img src="./images/Feature Image 3.jpeg" alt="Feature 3">
+                    </div>
                     <p>Premium aluminum heatsink for optimal thermal management.</p>
                 </div>
             </div>
@@ -88,47 +94,52 @@
             </div>
         </div>
     </section>
+<!-- Series Name Section -->
+<section class="series-section">
+    <div class="container">
+        <h2>WRAITH CLOSE-UP</h2>
 
-    <!-- Series Name Section -->
-    <section class="series-section">
-        <div class="container">
-            <h2>SERIES NAME</h2>
-            <div class="product-carousel">
-                <div class="main-image-container">
-                    <div id="main-product-image" class="placeholder-image large"></div>
-                    <div class="image-indicators">
-                        <span class="indicator active" data-image="0">1</span>
-                        <span class="indicator" data-image="1">2</span>
-                        <span class="indicator" data-image="2">3</span>
-                        <span class="indicator" data-image="3">4</span>
-                    </div>
-                </div>
-                <div class="thumbnails-container">
-                    <div class="thumbnail-item active" data-image="0" data-full-image="images/placeholder.png">
-                        <img src="images/placeholder.png" alt="Front View">
-                        <span class="thumbnail-label">Front View</span>
-                    </div>
-                    <div class="thumbnail-item" data-image="1" data-full-image="images/placeholder.png">
-                        <img src="images/placeholder.png" alt="Side View">
-                        <span class="thumbnail-label">Side View</span>
-                    </div>
-                    <div class="thumbnail-item" data-image="2" data-full-image="images/placeholder.png">
-                        <img src="images/placeholder.png" alt="Detail View">
-                        <span class="thumbnail-label">Detail View</span>
-                    </div>
-                    <div class="thumbnail-item" data-image="3" data-full-image="images/placeholder.png">
-                        <img src="images/placeholder.png" alt="RGB Lighting">
-                        <span class="thumbnail-label">RGB Lighting</span>
-                    </div>
+        <div class="product-carousel">
+            <!-- Main Image -->
+            <div class="main-image-container">
+                <img id="main-product-image" class="large" src="images/BothRAMSticks.png" alt="Main Product Image">
+                <div class="image-indicators">
+                    <span class="indicator active" data-image="0">1</span>
+                    <span class="indicator" data-image="1">2</span>
+                    <span class="indicator" data-image="2">3</span>
+                    <span class="indicator" data-image="3">4</span>
                 </div>
             </div>
-            <div class="series-info">
-                <h3>WRAITH DDR5 RGB</h3>
-                <p>Experience the pinnacle of memory technology with our flagship WRAITH DDR5 RGB series. Featuring advanced cooling, customizable RGB lighting, and unprecedented performance for gaming and creative professionals.</p>
-                <a href="#preorder-form-section" class="preorder-btn">PRE-ORDER NOW</a>
+
+            <!-- Thumbnails -->
+            <div class="thumbnails-container">
+                <div class="thumbnail-item active" data-image="0" data-full-image="images/BothRAMSticks.png">
+                    <img src="images/BothRAMSticks.png" alt="Both Black and White RAM Stick">
+                    <span class="thumbnail-label">Black & White RAM Stick</span>
+                </div>
+                <div class="thumbnail-item" data-image="1" data-full-image="images/FrontViewRAM.png">
+                    <img src="images/FrontViewRAM.png" alt="RAM Stick">
+                    <span class="thumbnail-label">RAM Stick</span>
+                </div>
+                <div class="thumbnail-item" data-image="2" data-full-image="images/PCBRAM.png">
+                    <img src="images/PCBRAM.png" alt="PCB RAM">
+                    <span class="thumbnail-label">PCB RAM</span>
+                </div>
+                <div class="thumbnail-item" data-image="3" data-full-image="images/NameCloseUpRAM.png">
+                    <img src="images/NameCloseUpRAM.png" alt="Detail View">
+                    <span class="thumbnail-label">Detail View</span>
+                </div>
             </div>
         </div>
-    </section>
+
+        <!-- Series Info -->
+        <div class="series-info">
+            <h3>WRAITH DDR5 RGB</h3>
+            <p>Experience the pinnacle of memory technology with our flagship WRAITH DDR5 RGB series. Featuring advanced cooling, customizable RGB lighting, and unprecedented performance for gaming and creative professionals.</p>
+            <a href="#preorder-form-section" class="preorder-btn">PRE-ORDER NOW</a>
+        </div>
+    </div>
+</section>
 
     <!-- Pre-order Form Section -->
     <section id="preorder-form-section" class="preorder-form-section">

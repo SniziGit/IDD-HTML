@@ -1,130 +1,80 @@
-// Three.js-based scrollable RAM viewer (more reliable)
 async function setupViewer() {
-    console.log('Setting up Three.js viewer...');
-    
     const canvas = document.getElementById('web-canvas');
-    if (!canvas) {
-        console.error('Canvas element not found');
-        return;
-    }
-    
-    // Set canvas size to full viewport
+    if (!canvas) return console.error('Canvas not found');
+
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    
-    // Three.js setup
+
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, canvas.width / canvas.height, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+    camera.position.set(0, 2, 6);
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
     renderer.setSize(canvas.width, canvas.height);
     renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    
-    // Position camera
-    camera.position.set(0, 0, 5);
-    
-    // Add lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-    scene.add(ambientLight);
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    directionalLight.position.set(5, 5, 5);
-    directionalLight.castShadow = true;
-    scene.add(directionalLight);
-    
-    // Load the ScrollRAM.glb model
+
+    // Lights
+    const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+    scene.add(ambient);
+
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    dirLight.position.set(5, 5, 5);
+    dirLight.castShadow = true;
+    scene.add(dirLight);
+
+    // Load model
     const loader = new THREE.GLTFLoader();
+    let model;
     try {
-        console.log('Loading ScrollRAM.glb...');
         const gltf = await loader.loadAsync('./assets/ScrollRAM.glb');
-        const model = gltf.scene;
-        
-        // Center and scale model
-        const box = new THREE.Box3().setFromObject(model);
-        const center = box.getCenter(new THREE.Vector3());
-        const size = box.getSize(new THREE.Vector3());
-        const maxDim = Math.max(size.x, size.y, size.z);
-        const scale = 3 / maxDim;
-        
-        model.position.sub(center);
-        model.scale.multiplyScalar(scale);
-        scene.add(model);
-        
-        console.log('ScrollRAM.glb loaded successfully');
-        
-        // Remove red background once model is loaded
-        canvas.style.background = 'transparent';
-        
-    } catch (error) {
-        console.error('Error loading ScrollRAM.glb:', error);
-        
-        // Try fallback model
-        try {
-            console.log('Trying fallback model...');
-            const gltf = await loader.loadAsync('./assets/WraithRAMBlack.glb');
-            const model = gltf.scene;
-            
-            const box = new THREE.Box3().setFromObject(model);
-            const center = box.getCenter(new THREE.Vector3());
-            const size = box.getSize(new THREE.Vector3());
-            const maxDim = Math.max(size.x, size.y, size.z);
-            const scale = 3 / maxDim;
-            
-            model.position.sub(center);
-            model.scale.multiplyScalar(scale);
-            scene.add(model);
-            
-            console.log('Fallback model loaded successfully');
-            canvas.style.background = 'transparent';
-        } catch (fallbackError) {
-            console.error('Fallback model also failed:', fallbackError);
-        }
+        model = gltf.scene;
+    } catch {
+        const gltf = await loader.loadAsync('./assets/WraithRAMBlack.glb');
+        model = gltf.scene;
     }
-    
-    // Scroll-based animation
-    function updateCamera() {
-        const modelSection = document.getElementById("combined-model-section");
-        if (modelSection) {
-            const rect = modelSection.getBoundingClientRect();
-            
-            // Calculate scroll progress within the combined section
-            // When section starts (rect.top > 0): progress = 0 (top)
-            // When section ends (rect.top < -rect.height): progress = 1 (bottom)
-            const sectionHeight = rect.height;
-            const currentDistance = Math.max(0, Math.min(sectionHeight, -rect.top));
-            const progress = currentDistance / sectionHeight;
-            
-            // Move camera from top to bottom based on scroll
-            // Start position (top): x=0, y=8, z=8 (looking down from above)
-            // End position (bottom): x=0, y=-8, z=8 (looking up from below)
-            camera.position.x = 0;  // Stay centered
-            camera.position.y = 8 - (progress * 16);  // 8 to -8 (top to bottom)
-            camera.position.z = 8;  // Fixed distance from model
-            camera.lookAt(0, 0, 0);
-        }
-    }
-    
-    // Animation loop with visibility optimization
-    let isAnimating = true;
+
+    // Center & scale
+    const box = new THREE.Box3().setFromObject(model);
+    const center = box.getCenter(new THREE.Vector3());
+    const size = box.getSize(new THREE.Vector3());
+    const scale = 3.5 / Math.max(size.x, size.y, size.z);
+    model.position.sub(center);
+    model.scale.multiplyScalar(scale);
+    scene.add(model);
+
+    let currentY = camera.position.y;
+    const xOffset = 0;
+    const yOffset = 0;
+
+    const combinedSection = document.getElementById('combined-features-section');
+    const combinedHeight = combinedSection.offsetHeight;
+
+   function updateCamera() {
+    const rect = combinedSection.getBoundingClientRect();
+    if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+
+    // scrollProgress 0 → top of section, 1 → bottom of section
+    let scrollProgress = (window.scrollY - combinedSection.offsetTop) / combinedSection.offsetHeight;
+    scrollProgress = Math.min(Math.max(scrollProgress, 0), 1);
+
+    // Camera Y moves from 2 → -6 for full section scroll
+    const startY = 2;
+    const endY = -6;
+    currentY += (startY + scrollProgress * (endY - startY) - currentY) * 0.5; // faster smoothing
+
+    camera.position.y = currentY;
+    camera.position.x = 0;
+    camera.position.z = 6 - scrollProgress * 3; // zoom in more aggressively
+    camera.lookAt(model.position);
+}
+
     function animate() {
-        if (!isAnimating) return;
         requestAnimationFrame(animate);
         updateCamera();
         renderer.render(scene, camera);
     }
-    
-    // Only animate when canvas is visible
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            isAnimating = entry.isIntersecting;
-            if (isAnimating) animate();
-        });
-    }, { threshold: 0.1 });
-    
-    observer.observe(canvas);
     animate();
-    
-    // Handle resize
+
     window.addEventListener('resize', () => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -134,20 +84,8 @@ async function setupViewer() {
     });
 }
 
-// Initialize when DOM is ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', setupViewer);
 } else {
     setupViewer();
 }
-
-// Back to top button functionality
-window.onscroll = function() {
-    if(document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-        const backToTop = document.querySelector('.back-to-top');
-        if (backToTop) backToTop.style.display = 'block';
-    } else {
-        const backToTop = document.querySelector('.back-to-top');
-        if (backToTop) backToTop.style.display = 'none';
-    }
-};
