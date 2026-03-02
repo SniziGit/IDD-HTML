@@ -400,10 +400,12 @@ body {
     display: flex;
     align-items: center;
     gap: 50px;
+    justify-content: center;
 }
 
 .feature-text {
     flex: 1;
+    text-align: center;
 }
 
 .feature h2 {
