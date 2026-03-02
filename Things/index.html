@@ -9,6 +9,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./styles/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        #web-canvas {
+            width: 100vw !important;
+            height: 100vh !important;
+            display: block !important;
+            position: relative !important;
+            z-index: 10 !important;
+            background: rgba(255, 0, 0, 0.1) !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+    </style>
 </head>
 <body>
 
@@ -43,20 +55,12 @@
         </div>
     </section>
 
-    <!-- VIEW 2 -->
-    <section id="view2" class="model-section">
-        <div class="model-wrapper">
-            <canvas id="canvas-view2"></canvas>
+    <!-- COMBINED MODEL SECTION -->
+    <section id="combined-model-section" class="combined-model-section">
+        <div class="combined-model-wrapper">
+            <canvas id="web-canvas"></canvas>
         </div>
-        <div class="section-label">#view2</div>
-    </section>
-
-    <!-- VIEW 4 -->
-    <section id="view4" class="model-section">
-        <div class="model-wrapper">
-            <canvas id="canvas-view4"></canvas>
-        </div>
-        <div class="section-label">#view4</div>
+        <div class="section-label">#model-view</div>
     </section>
     
     <!-- Feature 1 Section -->
@@ -135,8 +139,8 @@
         </div>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     <script src="./scripts/ScrollRAM.js"></script>
     <script src="./scripts/main.js"></script>
 </body>

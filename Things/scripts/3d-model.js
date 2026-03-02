@@ -374,9 +374,23 @@ function onWindowResize() {
 }
 
 /**
- * Animation loop
+ * Animation loop with visibility optimization
  */
 function animate() {
+    if (!renderer || !scene || !camera) return;
+    
+    // Check if model viewer is visible
+    const container = document.getElementById('modelViewer');
+    if (!container) return;
+    
+    const rect = container.getBoundingClientRect();
+    const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+    
+    if (!isVisible) {
+        requestAnimationFrame(animate);
+        return;
+    }
+    
     requestAnimationFrame(animate);
     
     if (controls) {
@@ -388,9 +402,7 @@ function animate() {
         emissiveColorAnimation.update();
     }
     
-    if (renderer && scene && camera) {
-        renderer.render(scene, camera);
-    }
+    renderer.render(scene, camera);
 }
 
 // =============================================================================
