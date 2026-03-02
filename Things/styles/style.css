@@ -52,6 +52,12 @@ body {
     color: var(--text-color);
 }
 
+.logo-img {
+    height: 130px;
+    width: auto;
+    object-fit: contain;
+}
+
 .nav-links {
     display: flex;
     list-style: none;
