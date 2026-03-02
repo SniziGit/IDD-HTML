@@ -121,9 +121,9 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: left;
+    align-items: flex-start;
     height: 100%;
-    position: fixed;
+    position: relative;
     margin-left: 100px;
     z-index: 10;
 }
@@ -198,11 +198,47 @@ body {
     50% { transform: translateY(-20px) rotateY(5deg); }
 }
 
+.hero-ram-card {
+    position: absolute;
+    width: 280px;
+    height: 120px;
+    background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+    border: 2px solid #333;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.hero-ram-card::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    height: 40px;
+    background: linear-gradient(90deg, #ff3366, #ff6699);
+    border-radius: 4px;
+    opacity: 0.8;
+}
+
+.hero-ram-card-top {
+    top: 0;
+    left: 10px;
+    transform: rotate(-5deg) translateZ(20px);
+}
+
+.hero-ram-card-middle {
+    top: 140px;
+    left: 0;
+    transform: rotate(0deg) translateZ(10px);
+}
+
+.hero-ram-card-bottom {
+    top: 280px;
+    left: 20px;
+    transform: rotate(5deg) translateZ(0px);
+}
+
 @media (max-width: 992px) {
-    .hero-title-main {
-        font-size: 120px;
-    }
-    
     .hero-image-block {
         right: 5%;
         width: 250px;
@@ -224,77 +260,6 @@ body {
     
     .hero-ram-card-bottom {
         top: 240px;
-    }
-}
-
-@media (max-width: 768px) {
-    .hero-title-main {
-        font-size: 80px;
-    }
-    
-    .hero-kicker {
-        font-size: 18px;
-        letter-spacing: 2px;
-    }
-    
-    .hero-image-block {
-        position: relative;
-        top: auto;
-        right: auto;
-        transform: none;
-        width: 200px;
-        height: 280px;
-        margin: 40px auto 0;
-    }
-    
-    .hero-ram-card {
-        width: 180px;
-        height: 80px;
-    }
-    
-    .hero-ram-card-top {
-        top: 0;
-    }
-    
-    .hero-ram-card-middle {
-        top: 100px;
-    }
-    
-    .hero-ram-card-bottom {
-        top: 200px;
-    }
-}
-
-@media (max-width: 576px) {
-    .hero-title-main {
-        font-size: 60px;
-    }
-    
-    .hero-kicker {
-        font-size: 16px;
-        letter-spacing: 1px;
-    }
-    
-    .hero-image-block {
-        width: 160px;
-        height: 220px;
-    }
-    
-    .hero-ram-card {
-        width: 140px;
-        height: 60px;
-    }
-    
-    .hero-ram-card-top {
-        top: 0;
-    }
-    
-    .hero-ram-card-middle {
-        top: 80px;
-    }
-    
-    .hero-ram-card-bottom {
-        top: 160px;
     }
 }
 
@@ -729,51 +694,53 @@ body {
 
 /* Responsive Styles */
 @media (max-width: 992px) {
-    .hero h1 {
-        font-size: 4rem;
-    }
-    
     .feature-content {
         flex-direction: column;
     }
     
-    .feature-alt .feature-content {
-        flex-direction: column-reverse;
+    .values-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .team-grid {
+        grid-template-columns: 1fr;
     }
 }
 
 @media (max-width: 768px) {
-    .nav {
-        flex-direction: column;
-        gap: 15px;
-    }
-    
     .nav-links {
         gap: 20px;
     }
     
-    .hero h1 {
-        font-size: 3rem;
+    .logo, .logo-right {
+        font-size: 20px;
     }
     
-    .subtitle {
-        font-size: 1rem;
+    .feature-content {
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .values-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .team-grid {
+        grid-template-columns: 1fr;
     }
 }
 
 @media (max-width: 576px) {
-    .hero h1 {
-        font-size: 2.5rem;
-    }
-    
     .nav-links {
-        flex-direction: column;
-        gap: 10px;
-        text-align: center;
+        gap: 15px;
     }
     
-    .footer-content {
-        flex-direction: column;
+    .logo, .logo-right {
+        font-size: 18px;
+    }
+    
+    .nav-links a {
+        font-size: 12px;
     }
 }
 
