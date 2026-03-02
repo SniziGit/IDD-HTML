@@ -1,1 +1,0 @@
-This is our Website OVERKILL Made by Aliyah Nabilah, Mohamad Daniel and Gabriel Wong for our IDD Submission. This is a fake website made to simulate a website for fictional graphics card company OVERKILL
