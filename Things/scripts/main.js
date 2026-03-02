@@ -1,23 +1,14 @@
 /**
  * OVERKILL Website - Main JavaScript File
  * Handles all interactive features and animations for the main website
- * Author: OVERKILL Development Team
- * Created: 2026
  */
 
-// =============================================================================
-// GLOBAL VARIABLES
-// =============================================================================
-
-// No global variables needed for main.js - using event-driven approach
-
-// =============================================================================
 // 3D MODEL VIEWER FUNCTIONALITY
-// =============================================================================
+
 
 /**
- * Initialize 3D model viewer functionality
- */
+Initialize 3D model viewer functionality
+ **/
 function initializeModelViewer() {
     const modelPlaceholder = document.querySelector('.model-placeholder');
     if (modelPlaceholder) {
@@ -365,6 +356,138 @@ function initializeProductPageFeatures() {
     initializeRamSlider();
     initializeColorButtons();
     initializePreorderForm();
+    initializeProductCarousel();
+}
+
+/**
+ * Initialize product image carousel functionality
+ */
+function initializeProductCarousel() {
+    const mainImage = document.getElementById('main-product-image');
+    const thumbnails = document.querySelectorAll('.thumbnail-item');
+    const indicators = document.querySelectorAll('.indicator');
+    
+    if (!mainImage || thumbnails.length === 0) return;
+    
+    // Store current image index
+    let currentImageIndex = 0;
+    
+    /**
+     * Update main image and active states
+     * @param {number} index - Image index to display
+     */
+    function updateMainImage(index) {
+        const thumbnail = thumbnails[index];
+        if (!thumbnail) return;
+        
+        const fullImageUrl = thumbnail.dataset.fullImage;
+        const thumbnailImg = thumbnail.querySelector('img');
+        
+        // Update main image with fade effect
+        mainImage.style.opacity = '0';
+        
+        setTimeout(() => {
+            mainImage.src = fullImageUrl;
+            mainImage.alt = thumbnailImg.alt;
+            mainImage.style.opacity = '1';
+        }, 200);
+        
+        // Update active states for thumbnails
+        thumbnails.forEach((thumb, i) => {
+            if (i === index) {
+                thumb.classList.add('active');
+            } else {
+                thumb.classList.remove('active');
+            }
+        });
+        
+        // Update active states for indicators
+        indicators.forEach((indicator, i) => {
+            if (i === index) {
+                indicator.classList.add('active');
+            } else {
+                indicator.classList.remove('active');
+            }
+        });
+        
+        currentImageIndex = index;
+    }
+    
+    // Add click events to thumbnails
+    thumbnails.forEach((thumbnail, index) => {
+        thumbnail.addEventListener('click', function() {
+            updateMainImage(index);
+        });
+        
+        // Add hover effect for better UX
+        thumbnail.addEventListener('mouseenter', function() {
+            if (!this.classList.contains('active')) {
+                this.style.transform = 'translateX(8px) scale(1.02)';
+            }
+        });
+        
+        thumbnail.addEventListener('mouseleave', function() {
+            if (!this.classList.contains('active')) {
+                this.style.transform = '';
+            }
+        });
+    });
+    
+    // Add click events to indicators
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', function() {
+            updateMainImage(index);
+        });
+    });
+    
+    // Add keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowLeft' && currentImageIndex > 0) {
+            updateMainImage(currentImageIndex - 1);
+        } else if (e.key === 'ArrowRight' && currentImageIndex < thumbnails.length - 1) {
+            updateMainImage(currentImageIndex + 1);
+        }
+    });
+    
+    // Add touch/swipe support for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    mainImage.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+    
+    mainImage.addEventListener('touchend', function(e) {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    });
+    
+    function handleSwipe() {
+        const swipeThreshold = 50;
+        const diff = touchStartX - touchEndX;
+        
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0 && currentImageIndex < thumbnails.length - 1) {
+                // Swipe left - next image
+                updateMainImage(currentImageIndex + 1);
+            } else if (diff < 0 && currentImageIndex > 0) {
+                // Swipe right - previous image
+                updateMainImage(currentImageIndex - 1);
+            }
+        }
+    }
+    
+    // Add smooth transition to main image
+    mainImage.style.transition = 'opacity 0.3s ease';
+    
+    // Preload images for smoother transitions
+    thumbnails.forEach(thumbnail => {
+        const fullImageUrl = thumbnail.dataset.fullImage;
+        if (fullImageUrl) {
+            const img = new Image();
+            img.src = fullImageUrl;
+        }
+    });
 }
 
 /**
@@ -441,96 +564,12 @@ function updatePrice(price) {
  * Initialize color selection buttons and custom color wheel
  */
 function initializeColorButtons() {
-    // Custom color wheel functionality
-    const customColorWheel = document.getElementById('customColorWheel');
-    const colorWheelCanvas = document.getElementById('colorWheelCanvas');
-    const colorPreview = document.querySelector('.color-preview');
-    const colorWheelPointer = document.querySelector('.color-wheel-pointer');
-    
-    if (customColorWheel && colorWheelCanvas && colorPreview) {
-        // Set canvas dimensions explicitly
-        colorWheelCanvas.width = 200;
-        colorWheelCanvas.height = 200;
-        
-        const ctx = colorWheelCanvas.getContext('2d');
-        const centerX = colorWheelCanvas.width / 2;
-        const centerY = colorWheelCanvas.height / 2;
-        const radius = Math.min(centerX, centerY) - 10;
-        
-        // Draw color wheel
-        drawColorWheel(ctx, centerX, centerY, radius);
-        
-        // Initialize with default color
-        let currentColor = '#ff3366';
-        colorPreview.style.backgroundColor = currentColor;
-        
-        // Handle color wheel interaction
-        colorWheelCanvas.addEventListener('click', function(e) {
-            const rect = colorWheelCanvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            // Calculate angle and distance from center
-            const dx = x - centerX;
-            const dy = y - centerY;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            
-            if (distance <= radius) {
-                // Calculate hue from angle
-                let angle = Math.atan2(dy, dx);
-                if (angle < 0) angle += 2 * Math.PI;
-                const hue = Math.round(angle * 180 / Math.PI);
-                
-                // Calculate saturation from distance
-                const saturation = Math.min(100, Math.round((distance / radius) * 100));
-                
-                // Convert HSL to Hex
-                currentColor = hslToHex(hue, saturation, 50);
-                
-                // Update preview and pointer
-                colorPreview.style.backgroundColor = currentColor;
-                updateColorPointer(x, y);
-                
-                // Remove active class from preset buttons
-                document.querySelectorAll('.preset-colors .color-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                
-                // Update product preview
-                updateProductColor(currentColor);
-            }
-        });
-        
-        // Handle mouse move for preview
-        colorWheelCanvas.addEventListener('mousemove', function(e) {
-            const rect = colorWheelCanvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            const dx = x - centerX;
-            const dy = y - centerY;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            
-            if (distance <= radius) {
-                colorWheelCanvas.style.cursor = 'crosshair';
-            } else {
-                colorWheelCanvas.style.cursor = 'default';
-            }
-        });
-        
-        // Initialize pointer position for default color
-        const defaultPos = getColorPosition(currentColor, centerX, centerY, radius);
-        if (defaultPos) {
-            updateColorPointer(defaultPos.x, defaultPos.y);
-        }
-    }
-    
     // Preset color buttons (black and white)
-    const colorButtons = document.querySelectorAll('.preset-colors .color-btn');
+    const colorButtons = document.querySelectorAll('.color-btn');
     colorButtons.forEach(button => {
         button.addEventListener('click', function() {
             // Remove active class from all preset buttons
-            document.querySelectorAll('.preset-colors .color-btn').forEach(btn => {
+            document.querySelectorAll('.color-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             
@@ -543,17 +582,6 @@ function initializeColorButtons() {
             // Update preview
             if (colorPreview) {
                 colorPreview.style.backgroundColor = selectedColor;
-            }
-            
-            // Update pointer position on color wheel
-            if (colorWheelCanvas) {
-                const centerX = colorWheelCanvas.width / 2;
-                const centerY = colorWheelCanvas.height / 2;
-                const radius = Math.min(centerX, centerY) - 10;
-                const pos = getColorPosition(selectedColor, centerX, centerY, radius);
-                if (pos) {
-                    updateColorPointer(pos.x, pos.y);
-                }
             }
             
             // Update product preview
@@ -580,160 +608,6 @@ function initializeColorButtons() {
     });
 }
 
-/**
- * Draw color wheel on canvas
- * @param {CanvasRenderingContext2D} ctx - Canvas context
- * @param {number} centerX - Center X coordinate
- * @param {number} centerY - Center Y coordinate
- * @param {number} radius - Wheel radius
- */
-function drawColorWheel(ctx, centerX, centerY, radius) {
-    // Clear canvas first
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    
-    // Draw color wheel using HSL color space
-    for (let y = -radius; y <= radius; y++) {
-        for (let x = -radius; x <= radius; x++) {
-            const distance = Math.sqrt(x * x + y * y);
-            
-            if (distance <= radius) {
-                // Calculate angle and convert to degrees
-                let angle = Math.atan2(y, x);
-                if (angle < 0) angle += 2 * Math.PI;
-                const degrees = Math.round(angle * 180 / Math.PI);
-                
-                // Calculate saturation based on distance from center
-                const saturation = Math.min(100, Math.round((distance / radius) * 100));
-                
-                // Use fixed lightness for vibrant colors
-                const lightness = 50;
-                
-                // Set pixel color
-                ctx.fillStyle = `hsl(${degrees}, ${saturation}%, ${lightness}%)`;
-                ctx.fillRect(centerX + x, centerY + y, 1, 1);
-            }
-        }
-    }
-    
-    // Add a subtle border
-    ctx.strokeStyle = '#333333';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-    ctx.stroke();
-}
-
-/**
- * Update color wheel pointer position
- * @param {number} x - X coordinate
- * @param {number} y - Y coordinate
- */
-function updateColorPointer(x, y) {
-    const pointer = document.querySelector('.color-wheel-pointer');
-    if (pointer) {
-        pointer.style.left = x + 'px';
-        pointer.style.top = y + 'px';
-    }
-}
-
-/**
- * Get position on color wheel for given color
- * @param {string} hex - Hex color
- * @param {number} centerX - Center X coordinate
- * @param {number} centerY - Center Y coordinate
- * @param {number} radius - Wheel radius
- * @returns {Object|null} - Position coordinates
- */
-function getColorPosition(hex, centerX, centerY, radius) {
-    const hsl = hexToHsl(hex);
-    if (!hsl) return null;
-    
-    const angle = hsl.h * Math.PI / 180;
-    const distance = (hsl.s / 100) * radius * 0.8; // Use 80% of radius for better visibility
-    
-    const x = centerX + distance * Math.cos(angle);
-    const y = centerY + distance * Math.sin(angle);
-    
-    return { x, y };
-}
-
-/**
- * Convert HSL to Hex
- * @param {number} h - Hue (0-360)
- * @param {number} s - Saturation (0-100)
- * @param {number} l - Lightness (0-100)
- * @returns {string} - Hex color
- */
-function hslToHex(h, s, l) {
-    s /= 100;
-    l /= 100;
-    
-    const c = (1 - Math.abs(2 * l - 1)) * s;
-    const x = c * (1 - Math.abs((h / 60) % 2 - 1));
-    const m = l - c / 2;
-    
-    let r = 0, g = 0, b = 0;
-    
-    if (0 <= h && h < 60) {
-        r = c; g = x; b = 0;
-    } else if (60 <= h && h < 120) {
-        r = x; g = c; b = 0;
-    } else if (120 <= h && h < 180) {
-        r = 0; g = c; b = x;
-    } else if (180 <= h && h < 240) {
-        r = 0; g = x; b = c;
-    } else if (240 <= h && h < 300) {
-        r = x; g = 0; b = c;
-    } else if (300 <= h && h < 360) {
-        r = c; g = 0; b = x;
-    }
-    
-    r = Math.round((r + m) * 255);
-    g = Math.round((g + m) * 255);
-    b = Math.round((b + m) * 255);
-    
-    return '#' + [r, g, b].map(x => {
-        const hex = x.toString(16);
-        return hex.length === 1 ? '0' + hex : hex;
-    }).join('');
-}
-
-/**
- * Convert Hex to HSL
- * @param {string} hex - Hex color
- * @returns {Object|null} - HSL values
- */
-function hexToHsl(hex) {
-    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    if (!result) return null;
-    
-    let r = parseInt(result[1], 16) / 255;
-    let g = parseInt(result[2], 16) / 255;
-    let b = parseInt(result[3], 16) / 255;
-    
-    const max = Math.max(r, g, b);
-    const min = Math.min(r, g, b);
-    let h, s, l = (max + min) / 2;
-    
-    if (max === min) {
-        h = s = 0;
-    } else {
-        const d = max - min;
-        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-        
-        switch (max) {
-            case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
-            case g: h = ((b - r) / d + 2) / 6; break;
-            case b: h = ((r - g) / d + 4) / 6; break;
-        }
-    }
-    
-    return {
-        h: Math.round(h * 360),
-        s: Math.round(s * 100),
-        l: Math.round(l * 100)
-    };
-}
 
 /**
  * Initialize pre-order form submission
@@ -947,12 +821,3 @@ function showNotification(message, type = 'success') {
     }, 5000);
 }
 
-// =============================================================================
-// CONSOLE EASTER EGG
-// =============================================================================
-
-/**
- * Display branded message in browser console
- */
-console.log('%c OVERKILL - Redefining Excellence ', 'background: #ff3366; color: white; font-size: 20px; font-weight: bold; padding: 10px;');
-console.log('%c There is no such thing as too much. ', 'color: #cccccc; font-size: 14px;');

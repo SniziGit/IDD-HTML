@@ -32,7 +32,7 @@
             <div class="product-hero-content">
                 <h1>WRAITH DDR5 RGB</h1>
                 <div class="product-hero-image">
-                    <div class="product-image-placeholder"></div>
+                    <div class="placeholder-image large"></div>
                 </div>
             </div>
         </div>
@@ -44,17 +44,17 @@
             <div class="features-grid">
                 <div class="feature-item">
                     <h3>FEATURE #1</h3>
-                    <div class="feature-image-placeholder"></div>
+                    <div class="placeholder-image small"></div>
                     <p>Advanced DDR5 technology for unprecedented performance and speed.</p>
                 </div>
                 <div class="feature-item">
                     <h3>FEATURE #2</h3>
-                    <div class="feature-image-placeholder"></div>
+                    <div class="placeholder-image small"></div>
                     <p>Customizable RGB lighting with millions of color combinations.</p>
                 </div>
                 <div class="feature-item">
                     <h3>FEATURE #3</h3>
-                    <div class="feature-image-placeholder"></div>
+                    <div class="placeholder-image small"></div>
                     <p>Premium aluminum heatsink for optimal thermal management.</p>
                 </div>
             </div>
@@ -88,34 +88,47 @@
 
     <!-- Series Name Section -->
     <section class="series-section">
-        <div class="container" id="product-display">
-            <div class="series-content" id="product-images-grid">
-                <div class="series-images">
-                    <div class="series-image-placeholder"></div>
-                    <div class="series-image-placeholder"></div>
-                    <div class="series-image-placeholder"></div>
-                </div>
-            </div>
-            <div class="series-image-placeholder" id="main"></div>
-        </div>
         <div class="container">
             <h2>SERIES NAME</h2>
-            <div class="series-content">
-                <div class="series-images">
-                    <div class="series-image-placeholder"></div>
-                    <div class="series-image-placeholder"></div>
+            <div class="product-carousel">
+                <div class="main-image-container">
+                    <div id="main-product-image" class="placeholder-image large"></div>
+                    <div class="image-indicators">
+                        <span class="indicator active" data-image="0">1</span>
+                        <span class="indicator" data-image="1">2</span>
+                        <span class="indicator" data-image="2">3</span>
+                        <span class="indicator" data-image="3">4</span>
+                    </div>
                 </div>
-                <div class="series-info">
-                    <h3>ITEM NAME</h3>
-                    <p>DESCRIPTION</p>
-                    <button class="preorder-btn">PRE-ORDER NOW</button>
+                <div class="thumbnails-container">
+                    <div class="thumbnail-item active" data-image="0" data-full-image="images/placeholder.png">
+                        <img src="images/placeholder.png" alt="Front View">
+                        <span class="thumbnail-label">Front View</span>
+                    </div>
+                    <div class="thumbnail-item" data-image="1" data-full-image="images/placeholder.png">
+                        <img src="images/placeholder.png" alt="Side View">
+                        <span class="thumbnail-label">Side View</span>
+                    </div>
+                    <div class="thumbnail-item" data-image="2" data-full-image="images/placeholder.png">
+                        <img src="images/placeholder.png" alt="Detail View">
+                        <span class="thumbnail-label">Detail View</span>
+                    </div>
+                    <div class="thumbnail-item" data-image="3" data-full-image="images/placeholder.png">
+                        <img src="images/placeholder.png" alt="RGB Lighting">
+                        <span class="thumbnail-label">RGB Lighting</span>
+                    </div>
                 </div>
+            </div>
+            <div class="series-info">
+                <h3>WRAITH DDR5 RGB</h3>
+                <p>Experience the pinnacle of memory technology with our flagship WRAITH DDR5 RGB series. Featuring advanced cooling, customizable RGB lighting, and unprecedented performance for gaming and creative professionals.</p>
+                <a href="#preorder-form-section" class="preorder-btn">PRE-ORDER NOW</a>
             </div>
         </div>
     </section>
 
     <!-- Pre-order Form Section -->
-    <section class="preorder-form-section">
+    <section id="preorder-form-section" class="preorder-form-section">
         <div class="container">
             <h2>SIGN UP FOR PRE-ORDER</h2>
             <div class="preorder-form">
@@ -159,19 +172,19 @@
         </div>
     </section>
 
-    <!-- Footer -->
+   <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>OVERKILL</h3>
-                    <p>2026. OVERKILL</p>
-                    <p>Tagline Of The Company</p>
+                    <h2>OVERKILL</h2>
+                    <h4>©2026 OVERKILL Pte. Ltd.</h4>
+                    <p>There is no such thing as too much.</p>
                 </div>
                 <div class="footer-section">
-                    <h3>Find Us Here</h3>
-                    <p>123 Design Street, Tech City, TC 12345</p>
-                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <h2>Find Us Here</h2>
+                    <p>500 Dover Road, Singapore 139651</p>
+                    <p><i class="fas fa-phone"></i> +65 6789 1011</p>
                     <p><i class="fas fa-envelope"></i> info@overkill.com</p>
                 </div>
             </div>
