@@ -14,6 +14,8 @@ let modelMesh = null;
 let emissiveMaterial = null;
 let baseMaterial = null;
 let emissiveColorAnimation = null;
+let currentModelPath = './assets/WraithRAMBlack.glb'; // Default to black model
+let originalEmissiveMap = null; // Store original emissive map
 
 // =============================================================================
 // 3D MODEL VIEWER INITIALIZATION
@@ -76,38 +78,60 @@ function initialize3DModel() {
  * Setup lighting for the 3D scene
  */
 function setupLighting() {
-    // Ambient light for overall illumination
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+    // Ambient light for overall illumination (reduced from 1.2 to 0.6)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     scene.add(ambientLight);
 
-    // Main directional light
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
+    // Main directional light (reduced from 3 to 1.5)
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
     directionalLight.position.set(5, 5, 5);
     directionalLight.castShadow = true;
     directionalLight.shadow.mapSize.width = 2048;
     directionalLight.shadow.mapSize.height = 2048;
     scene.add(directionalLight);
 
-    // Fill light
-    const fillLight = new THREE.DirectionalLight(0xffffff, 1);
+    // Fill light (reduced from 1 to 0.5)
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.5);
     fillLight.position.set(-5, 0, -5);
     scene.add(fillLight);
 
-    // Rim light for edge definition
-    const rimLight = new THREE.DirectionalLight(0xff3366, 0.5);
+    // Rim light for edge definition (reduced from 0.5 to 0.2)
+    const rimLight = new THREE.DirectionalLight(0xff3366, 0.2);
     rimLight.position.set(0, -5, -5);
     scene.add(rimLight);
 }
 
 /**
  * Load the 3D model
+ * @param {string} modelPath - Path to the model file
  */
-function load3DModel() {
+function load3DModel(modelPath = currentModelPath) {
     const loader = new THREE.GLTFLoader();
+    const textureLoader = new THREE.TextureLoader();
+    
+    // Determine emissive map path based on model
+    let emissiveMapPath;
+    if (modelPath.includes('WraithRAMBlack.glb')) {
+        emissiveMapPath = './assets/Emissive_Black.png';
+    } else if (modelPath.includes('WraithRAMWhite.glb')) {
+        emissiveMapPath = './assets/Emissive_White.png';
+    } else {
+        emissiveMapPath = null;
+    }
     
     loader.load(
-        './assets/Wraith.glb',
+        modelPath,
         function (gltf) {
+            // Remove existing model if there is one
+            if (model) {
+                scene.remove(model);
+                // Reset material references
+                modelMesh = null;
+                emissiveMaterial = null;
+                baseMaterial = null;
+                originalEmissiveMap = null;
+            }
+            
             model = gltf.scene;
             
             // Center the model
@@ -126,10 +150,35 @@ function load3DModel() {
             // Find and store mesh materials
             findModelMaterials(model);
             
-            // Start infinite emissive color animation
+            // Load and apply emissive map if available
+            if (emissiveMapPath && emissiveMaterial) {
+                textureLoader.load(
+                    emissiveMapPath,
+                    function (texture) {
+                        console.log('Loading emissive map for RGB lighting parts');
+                        originalEmissiveMap = texture;
+                        
+                        // Apply emissive map ONLY to the emissive material
+                        emissiveMaterial.emissiveMap = texture;
+                        emissiveMaterial.emissive = new THREE.Color(0xffffff); // White to show map colors
+                        emissiveMaterial.emissiveIntensity = 0.8; // Reduced brightness
+                        emissiveMaterial.needsUpdate = true;
+                        
+                        console.log('Emissive map applied to RGB lighting material');
+                    },
+                    undefined,
+                    function (error) {
+                        console.error('Error loading emissive map:', error);
+                    }
+                );
+            } else {
+                console.log('No emissive map path or emissive material found');
+            }
+            
+            // Restart infinite emissive color animation
             startEmissiveColorAnimation();
             
-            console.log('3D model loaded successfully');
+            console.log('3D model loaded successfully:', modelPath);
         },
         function (xhr) {
             console.log((xhr.loaded / xhr.total * 100) + '% loaded');
@@ -145,37 +194,106 @@ function load3DModel() {
  * @param {THREE.Object3D} object - 3D object to search
  */
 function findModelMaterials(object) {
+    console.log('Searching for materials in model...');
+    emissiveMaterial = null;
+    baseMaterial = null;
+    originalEmissiveMap = null;
+
     object.traverse(function (child) {
         if (child.isMesh) {
+            console.log('Found mesh:', child.name || 'unnamed');
+            
             if (!modelMesh) {
                 modelMesh = child;
             }
             
-            // Store materials for color manipulation
-            if (child.material) {
-                if (child.material.emissive) {
-                    emissiveMaterial = child.material;
-                }
-                if (child.material.color) {
-                    baseMaterial = child.material;
-                }
+            // Handle both single materials and arrays of materials
+            const materials = Array.isArray(child.material) ? child.material : [child.material];
+            
+            materials.forEach(material => {
+                if (!material) return;
                 
-                // Ensure materials can be modified
-                child.material.needsUpdate = true;
-            }
+                console.log('Material:', material.name || 'unnamed');
+                console.log('- Has emissiveMap:', !!material.emissiveMap);
+                console.log('- Has emissive:', !!material.emissive);
+                console.log('- Emissive color:', material.emissive);
+                
+                // Look for material that has emissive properties (RGB lighting parts)
+                if (material.emissiveMap || (material.emissive && material.emissive.getHex() !== 0x000000)) {
+                    emissiveMaterial = material;
+                    console.log('Found emissive material for RGB lighting');
+                }
+                // Look for base material (non-emissive parts)
+                else if (material.color && !baseMaterial) {
+                    baseMaterial = material;
+                    console.log('Found base material');
+                }
+            });
         }
     });
+    
+    console.log('Final - emissiveMaterial:', !!emissiveMaterial, 'baseMaterial:', !!baseMaterial);
 }
 
 /**
- * Update emissive color of the model
+ * Update emissive color of the model by modifying the emissive map texture
  * @param {string} color - Hex color value
  */
 function updateEmissiveColor(color) {
+    console.log('updateEmissiveColor called with:', color);
+    console.log('emissiveMaterial:', emissiveMaterial);
+    console.log('originalEmissiveMap:', originalEmissiveMap);
+    
     if (emissiveMaterial) {
-        emissiveMaterial.emissive = new THREE.Color(color);
-        emissiveMaterial.emissiveIntensity = 10;
-        emissiveMaterial.needsUpdate = true;
+        if (originalEmissiveMap) {
+            console.log('Using emissive map approach');
+            // Create a canvas to modify the emissive map texture
+            const canvas = document.createElement('canvas');
+            canvas.width = originalEmissiveMap.image.width;
+            canvas.height = originalEmissiveMap.image.height;
+            const ctx = canvas.getContext('2d');
+            
+            // Draw the original emissive map
+            ctx.drawImage(originalEmissiveMap.image, 0, 0);
+            
+            // Get image data and apply color overlay
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+            const targetColor = new THREE.Color(color);
+            
+            // Apply color to non-transparent pixels
+            for (let i = 0; i < data.length; i += 4) {
+                if (data[i + 3] > 0) { // If alpha > 0 (not transparent)
+                    data[i] = targetColor.r * 255;     // Red
+                    data[i + 1] = targetColor.g * 255; // Green
+                    data[i + 2] = targetColor.b * 255; // Blue
+                    // Keep original alpha
+                }
+            }
+            
+            ctx.putImageData(imageData, 0, 0);
+            
+            // Create new texture from modified canvas
+            const newTexture = new THREE.CanvasTexture(canvas);
+            newTexture.wrapS = originalEmissiveMap.wrapS;
+            newTexture.wrapT = originalEmissiveMap.wrapT;
+            newTexture.magFilter = originalEmissiveMap.magFilter;
+            newTexture.minFilter = originalEmissiveMap.minFilter;
+            
+            // Apply the modified emissive map
+            emissiveMaterial.emissiveMap = newTexture;
+            emissiveMaterial.emissive = new THREE.Color(0xffffff); // White emissive to show map color
+            emissiveMaterial.emissiveIntensity = 5; // Reduced brightness
+            emissiveMaterial.needsUpdate = true;
+        } else {
+            console.log('No emissive map found, using fallback emissive color');
+            // Fallback to emissive color if no emissive map exists
+            emissiveMaterial.emissive = new THREE.Color(color);
+            emissiveMaterial.emissiveIntensity = 0.8; // Reduced brightness
+            emissiveMaterial.needsUpdate = true;
+        }
+    } else {
+        console.log('No emissive material found');
     }
 }
 
@@ -216,9 +334,11 @@ function startEmissiveColorAnimation() {
             const nextColor = new THREE.Color(colors[nextColorIndex]);
             const lerpedColor = currentColor.clone().lerp(nextColor, lerpProgress);
             
-            emissiveMaterial.emissive = lerpedColor;
-            emissiveMaterial.emissiveIntensity = 10;
-            emissiveMaterial.needsUpdate = true;
+            // Convert to hex for updateEmissiveColor function
+            const hexColor = '#' + lerpedColor.getHexString();
+            
+            // Use the same updateEmissiveColor function to maintain consistency
+            updateEmissiveColor(hexColor);
         }
     };
 }
@@ -350,8 +470,19 @@ function initializeColorControls() {
             // Get color from data attribute
             const selectedColor = this.dataset.color;
             
-            // Update 3D model base color
-            updateBaseColor(selectedColor);
+            // Determine which model to load based on color
+            let newModelPath;
+            if (selectedColor === '#000000') {
+                newModelPath = './assets/WraithRAMBlack.glb';
+            } else if (selectedColor === '#ffffff') {
+                newModelPath = './assets/WraithRAMWhite.glb';
+            }
+            
+            // Update current model path and load the new model
+            if (newModelPath && newModelPath !== currentModelPath) {
+                currentModelPath = newModelPath;
+                load3DModel(newModelPath);
+            }
         });
     });
 }
