@@ -399,11 +399,13 @@ body {
 .feature-content {
     display: flex;
     align-items: center;
+    justify-content: center; /* Center horizontally */
     gap: 50px;
 }
 
 .feature-text {
     flex: 1;
+    align-items: center;
 }
 
 .feature h2 {
@@ -412,6 +414,7 @@ body {
     color: var(--primary-color);
     text-transform: uppercase;
     letter-spacing: 2px;
+    align-items: center;
 }
 
 .feature p {
