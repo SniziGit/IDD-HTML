@@ -51,6 +51,10 @@ body {
     font-weight: bold;
     color: var(--text-color);
 }
+.logo{
+    width: 200px;
+    height: auto;
+}
 
 .logo-img {
     height: 130px;
